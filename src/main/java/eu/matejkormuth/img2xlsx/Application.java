@@ -34,17 +34,20 @@ public class Application {
 
         short size = 64;
 
-        for (int x = 0; x < image.getWidth(); x++) {
+        for (int x = 0; x < image.getHeight(); x++) {
             Row row = sheet.createRow(x);
             row.setHeight((short) (20 * 12));
-            for (int y = 0; y < image.getHeight(); y++) {
+            for (int y = 0; y < image.getWidth(); y++) {
                 row.createCell(y);
             }
         }
 
-        for (int y = 0; y < image.getHeight(); y++) {
+        for (int y = 0; y < image.getWidth(); y++) {
             sheet.setColumnWidth(y, (int) (256 * 2.66f));
         }
+
+        int total = image.getHeight() * image.getWidth();
+        int done = 0;
 
         //Get iterator to all the rows in current sheet
         Iterator<Row> rowIterator = sheet.iterator();
@@ -68,7 +71,9 @@ public class Application {
                 style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
                 currentCell.setCellStyle(style);
+                done++;
             }
+            System.out.printf("%.2f %%\n", done / (float) total * 100);
         }
 
         FileOutputStream stream = new FileOutputStream(xlsx);
